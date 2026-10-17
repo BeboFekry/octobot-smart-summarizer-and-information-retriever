@@ -1,0 +1,10 @@
+[theme]
+#2980b9
+base="dark"
+primaryColor="#0e99f5a3"
+grayTextColor="#e7eaec"
+
+# backgroundColor="#0c365da3"
+secondaryBackgroundColor="#08243fa7"
+
+# textColor = "rgb(210,210,210)"
