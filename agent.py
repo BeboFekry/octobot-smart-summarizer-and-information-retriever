@@ -36,10 +36,12 @@ SOURCE CONTENT:
 {content}
 eturn a readable Markdown summary. Do not claim to have processed text that was not supplied.""")
 
-prompt = PromptTemplate.from_template("""You are Octobot, a document question-answering assistant using retrieval-augmented generation.
+prompt = PromptTemplate.from_template("""You are Octobot, a document question-answering and summarizer assistant. you are developed by Eng. Abdallah Fekry
+You can answer questions from references and summarize documents from attached files as [pdf, docx, txt], Youtube videos, Web pages. 
+User can add resources from the top right of the web page by uploading files, insert Youtube video link, or insert webpage link
 
 STRICT GROUNDING:
-- Answer factual questions using ONLY the retrieved context below. Do not use outside knowledge,
+- Answer questions using ONLY the retrieved context below. Do not use outside knowledge,
   assumptions, or training knowledge to fill gaps.
 - If the context does not contain enough evidence, say that the available sources do not provide
   enough information. If only part can be answered, answer that part and identify the gap.
@@ -58,7 +60,7 @@ CITATIONS:
 - If there is no useful retrieved context, explain that you cannot answer from the available resources.
 
 LANGUAGE AND STYLE:
-- Respond in the same language as the user's question.
+- Respond in the language {language}.
 - Answer directly, clearly, and without unnecessary filler.
 
 
@@ -77,18 +79,6 @@ class Agent():
         # self.message_history = []
         self.API = API
         self.embedding_model = HuggingFaceEmbeddings(model_name="BAAI/bge-m3")
-        # def create_agent(API):
-            # """create the agent and return it"""
-            # tools = [search_patient, search_query, show_patient_report]
-            # "gemini-3.1-flash-lite-preview"
-            # llm = ChatGoogleGenerativeAI(
-            #     model="gemini-3.5-flash-lite",
-            #     google_api_key=API,
-            #     temperature=0
-            # )
-            # return create_react_agent(llm, tools)
-        # if build_agent:
-        #     self.agent = create_agent(API)
         if os.path.exists('chroma_db'):
             vector_database = Chroma(
             persist_directory="./chroma_db",
@@ -107,12 +97,6 @@ class Agent():
             google_api_key=API,
             temperature=0
         )
-        # self.rag_chain = (
-        #     {"context":self.retriever, "question":RunnablePassthrough()}
-        #     | prompt
-        #     | self.llm
-        #     | StrOutputParser()
-        # )
         self.recognizer = sr.Recognizer()
     
     def add_resources(self, text, source_type='text', source_name='unkown'):
@@ -157,8 +141,7 @@ class Agent():
             text = self.recognizer.recognize_google(audio, language="en-US")
         return text
 
-    def predict(self, messages):
-        # return "Hello, I am Octobot, to start conversation can you please upload your data resources?"
+    def predict(self, messages, language):
         # get retrieved documents
         docs = self.retriever.invoke(messages[-1][-1])
         chat_history = messages[1:-1]
@@ -167,7 +150,8 @@ class Agent():
         response = self.llm.invoke(prompt.invoke({
             'context':docs,
             'chat_history':chat_history,
-            'question':messages[-1][-1]
+            'question':messages[-1][-1],
+            'language':language
         }))
         return response.content[-1]['text']
     
