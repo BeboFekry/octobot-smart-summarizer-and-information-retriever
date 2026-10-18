@@ -38,7 +38,7 @@ def set_bg_video(video_file):
     """
   st.markdown(html_code, unsafe_allow_html=True)
 
-set_bg_video(r"media\bg video.webm")
+set_bg_video(r"media/bg video.webm")
 chat = st.Page('chat.py')
 
 with open('data/html.txt','rb') as f:
