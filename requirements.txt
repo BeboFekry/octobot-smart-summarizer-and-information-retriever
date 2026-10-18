@@ -12,5 +12,4 @@ sentence-transformers
 youtube_transcript_api
 
 python-docx
-validator_collection 
-tempfile
+validator_collection
