@@ -5,7 +5,7 @@ import base64
 
 # st.subheader("AI Medical Agent - NationAI Assesment", divider='blue')
 
-st.set_page_config(page_title="Documents Retreival Agent/Home", initial_sidebar_state='collapsed', layout='wide')
+st.set_page_config(page_title="Octobot/Home", initial_sidebar_state='collapsed', layout='wide')
 def set_bg_video(video_file):
   with open(video_file, "rb") as f:
     encoded_video = base64.b64encode(f.read()).decode()
