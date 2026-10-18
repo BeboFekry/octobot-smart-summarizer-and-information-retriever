@@ -15,7 +15,7 @@ import tempfile
 import io
 import datetime
 
-st.set_page_config(page_title='Document Agent', layout='wide')
+st.set_page_config(page_title='Octobot Agent', layout='wide')
 
 if 'agent' not in st.session_state:
     with st.spinner('Please wait, Loading Data Sources...'):
