@@ -130,7 +130,7 @@ def file_scrap(file):
         text = "\n".join([paragraph.text for paragraph in doc.paragraphs])
     return text
 
-youtube_link = st.text_input(":red[:material/smart_display:] YouTube Video", placeholder='https://www.youtube.com/watch?v=x', icon=':material/smart_display:')
+youtube_link = st.text_input(":red[:material/smart_display:] YouTube Video", placeholder='https://www.youtube.com/watch?v=x', icon=':material/smart_display:', key=111)
 if youtube_link and checkers.is_url(youtube_link):
     found = True
     # for r in st.session_state.resources:
@@ -141,14 +141,15 @@ if youtube_link and checkers.is_url(youtube_link):
         if case=='error':
             st.error(text)
         else:
-            with st.spinner("Please wait while geting the video's subtitles..."):
-                summary = st.session_state.agent.summarize(text, 'youtube video', youtube_link, st.session_state.language)
-                st.session_state.messages['messages'].append(('human', f"""attached "{youtube_link}" video link to summarize"""))
-                st.session_state.messages['messages'].append(('ai',summary))
-                st.session_state.agent.add_resources(text, 'youtube video', youtube_link)
-                add_resources(youtube_link, 'youtube', summary, datetime.date.today())
-                st.success("Your Youtube video added to resources successfully!!")
-                st.rerun()
+            st.sucess("done")
+            # with st.spinner("Please wait while geting the video's subtitles..."):
+            #     summary = st.session_state.agent.summarize(text, 'youtube video', youtube_link, st.session_state.language)
+            #     st.session_state.messages['messages'].append(('human', f"""attached "{youtube_link}" video link to summarize"""))
+            #     st.session_state.messages['messages'].append(('ai',summary))
+            #     st.session_state.agent.add_resources(text, 'youtube video', youtube_link)
+            #     add_resources(youtube_link, 'youtube', summary, datetime.date.today())
+            #     st.success("Your Youtube video added to resources successfully!!")
+            #     st.rerun()
     else:
         st.error("Youtube video is exist already!")
 
