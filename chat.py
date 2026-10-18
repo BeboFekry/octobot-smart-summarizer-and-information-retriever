@@ -148,6 +148,7 @@ with col2:
             greeting_ar = "أهلا بيك 👋, انا, أقدر اساعدك ازاي النهاردة؟"
             st.chat_message("assistant", avatar='media/bot avatar.png').info(greeting_ar if st.session_state.language=='Arabic' else greeting_en)
             mt = st.empty()
+            mt2 = st.empty()
             # st.file_uploader("Upload your data resourcess:", accept_multiple_files=True, type=['csv', 'pdf', 'txt', 'docx'])
 
 # uploading (add resources)
