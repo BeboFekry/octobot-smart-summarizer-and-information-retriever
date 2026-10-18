@@ -11,8 +11,6 @@ pydantic
 sentence-transformers
 youtube_transcript_api
 
-urllib
 python-docx
 validator_collection 
 tempfile
-
