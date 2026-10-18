@@ -275,15 +275,15 @@ with col1:
 
 
 
-# if st.session_state.resources:
-#     message = st.chat_input("Say Something...", accept_audio=True, accept_file='multiple', file_type=['csv', 'pdf', 'txt', 'docx'], max_upload_size=20)
-# else:
-#     message = st.chat_input("Say Something...", accept_audio=True, accept_file='multiple', file_type=['csv', 'pdf', 'txt', 'docx'], max_upload_size=20, disabled=True)
+if st.session_state.resources:
+    message = st.chat_input("Say Something...", accept_audio=True, accept_file='multiple', file_type=['csv', 'pdf', 'txt', 'docx'], max_upload_size=20)
+else:
+    message = st.chat_input("Say Something...", accept_audio=True, accept_file='multiple', file_type=['csv', 'pdf', 'txt', 'docx'], max_upload_size=20, disabled=True)
 # st.write(st.session_state.resources)
 
 # for m in st.session_state.messages
 
-message = st.chat_input("Say Something...", accept_audio=True, accept_file='multiple', file_type=['csv', 'pdf', 'txt', 'docx'], max_upload_size=20)
+# message = st.chat_input("Say Something...", accept_audio=True, accept_file='multiple', file_type=['csv', 'pdf', 'txt', 'docx'], max_upload_size=20)
 if message:
     # if message.files:
     #     pass
