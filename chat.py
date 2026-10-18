@@ -132,7 +132,7 @@ def file_scrap(file):
 
 youtube_link = st.text_input(":red[:material/smart_display:] YouTube Video", placeholder='https://www.youtube.com/watch?v=x', icon=':material/smart_display:', key=111)
 if youtube_link and checkers.is_url(youtube_link):
-    found = True
+    found = False
     # for r in st.session_state.resources:
     #     if youtube_link==r['name']:
     #         found=True
