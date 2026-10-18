@@ -41,8 +41,8 @@ def set_bg_video(video_file):
 set_bg_video(r"media/bg video.webm")
 chat = st.Page('chat.py')
 
-with open('data/html.txt','rb') as f:
-    particles_js = f.read()
+# with open('data/html.txt','rb') as f:
+#     particles_js = f.read()
 
 col1, col2, col3 = st.columns([1,4,1])
 
