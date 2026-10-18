@@ -291,7 +291,7 @@ if message:
     # with mt2.chat_message("assistant", avatar='media/bot avatar.png').spinner():
     if message.text:
         mt.chat_message("user", avatar='media/user avatar.png').markdown(message.text, text_alignment="right" if st.session_state.language =='Arabic' else 'left')
-        with mt2.chat_message("assistant", avatar='media/bot avatar.png').spinner():
+        # with mt2.chat_message("assistant", avatar='media/bot avatar.png').spinner():
             st.session_state.messages['messages'].append(('human', message.text))
             response = st.session_state.agent.predict(st.session_state.messages['messages'], st.session_state.language)
             # st.write(response.content)
