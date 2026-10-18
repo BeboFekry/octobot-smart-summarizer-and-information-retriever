@@ -46,6 +46,7 @@ def add_resources(name, tp, summary, date):
             "date":date
         }
     )
+    
 # uploaded files -> (pdf, txt, docs), images of pdf of images, YouTube video, web link
 # def summarize(text):
 #     pass
@@ -130,7 +131,7 @@ def file_scrap(file):
     return text
 
 
-col1, col2, col3 = st.columns([1,2,0.9])
+col2, col1 = st.columns([2,0.8])
 # chat history
 with col2:
     # with st.container(border=True):
@@ -141,6 +142,7 @@ with col2:
                 elif message[0]=="ai":
                     st.chat_message("assistant", avatar='media/bot avatar.png').markdown(message[-1], text_alignment="right" if st.session_state.language =='Arabic' else 'left')   
             mt = st.empty()
+            mt2 = st.empty()
         else:
             greeting_en = "Hello 👋, I am Octobot, your documents summarizer and researcher assistant.  \nTo start conversation can you please add your data resources?"
             greeting_ar = "أهلا بيك 👋, انا, أقدر اساعدك ازاي النهاردة؟"
@@ -151,7 +153,7 @@ with col2:
 # uploading (add resources)
 with col1:
     with st.container(border=True):
-        st.subheader("**Add Resources**", divider='blue')
+        st.subheader(":material/add_circle: **Add Resources**", divider='blue')
         web_link = st.text_input(":blue[:material/link:] Web Page", placeholder='www.test-article.com', icon=':material/link:')
         if web_link and not checkers.is_url(web_link):
             st.error("Error: Invalid Link!")
@@ -187,7 +189,7 @@ with col1:
                             st.session_state.agent.add_resources(text, source_type, source_name)
                             add_resources(f.name, f.name.split('.')[-1].lower(), summary, datetime.date.today())
                             st.success("Your document file added to resources successfully!")
-                            st.rerun()
+                            # st.rerun()
                         else:
                             st.error("File is exist already!")
             # Web link
@@ -206,7 +208,7 @@ with col1:
                             st.session_state.agent.add_resources(text, 'web_page', web_link)
                             add_resources(web_link, 'web-page', summary, datetime.date.today())
                             st.success("Your web article added to resources successfully!")
-                            st.rerun()
+                            # st.rerun()
                     else:
                         st.error("Error: cann't access this web page!") 
                 else:
@@ -229,32 +231,48 @@ with col1:
                             st.session_state.agent.add_resources(text, 'youtube video', youtube_link)
                             add_resources(youtube_link, 'youtube', summary, datetime.date.today())
                             st.success("Your Youtube video added to resources successfully!!")
-                            st.rerun()
+                            # st.rerun()
                 else:
                     st.error("Youtube video is exist already!")
+            st.rerun()
             st.space('xxsmall')
         # st.divider()
-
-# Resources history
-with col3:
-    with st.container(border=True):
-        st.subheader("**Your Resources**", divider='blue')
-        types = ['pdf', 'docx','txt', 'web-page', 'youtube']
-        icons = {'web-page':":blue[:material/link:]", 'youtube':":red[:material/smart_display:]", 'pdf':":orange[:material/attachment:]", 'docx':":orange[:material/attachment:]", 'txt':":orange[:material/attachment:]"}
-        if st.session_state.resources:
-            for r in st.session_state.resources:
-                st.markdown(f"{icons[r['type']]} {r['name']}")
-                col11, col22 = st.columns([2,1], vertical_alignment='center')
-                with col11:
+    
+    # view resources 
+    if st.session_state.resources:
+        with st.container(border=True):
+            st.subheader(":material/database: **Your Resources**", divider='blue')
+            types = ['pdf', 'docx','txt', 'web-page', 'youtube']
+            icons = {'web-page':":blue[:material/link:]", 'youtube':":red[:material/smart_display:]", 'pdf':":orange[:material/attachment:]", 'docx':":orange[:material/attachment:]", 'txt':":orange[:material/attachment:]"}
+            if st.session_state.resources:
+                for r in st.session_state.resources:
+                    # tp = "Web-Page" if r['type'] == 'web-page' else "Attached file"
+                    if r['type']=='web-page':
+                        tp = 'Web-Page'
+                    elif r['type']=='youtube':
+                        tp = 'Youtube Video'
+                    else:
+                        tp = 'Attached File'
+                    col11, col22 = st.columns([2,1], vertical_alignment='center')
+                    with col11:
+                        st.markdown(f"{icons[r['type']]} {tp}")
+                    with col22:
+                        st.caption(r['date'], text_alignment='right')
+                    # st.markdown(f"{icons[r['type']]} {tp}")
+                    st.markdown(r['name'])
+                    # col11, col22 = st.columns([2,1], vertical_alignment='center')
+                    # with col11:
                     with st.popover("Summary", type='tertiary'):
                         st.markdown(r['summary'])
-                with col22:
-                    st.caption(r['date'], text_alignment='right')
-        else:
-            st.space()
-            st.warning("You haven't uploaded any data resources!")
-        st.space('xxsmall')
-        # st.divider()
+                    # with col22:
+                        # st.caption(r['date'], text_alignment='right')
+                    st.divider()
+            else:
+                # st.space()
+                st.warning("You haven't uploaded any data resources!")
+
+
+
 
 # if st.session_state.resources:
 #     message = st.chat_input("Say Something...", accept_audio=True, accept_file='multiple', file_type=['csv', 'pdf', 'txt', 'docx'], max_upload_size=20)
@@ -268,110 +286,83 @@ message = st.chat_input("Say Something...", accept_audio=True, accept_file='mult
 if message:
     # if message.files:
     #     pass
-    with mt.chat_message("assistant", avatar='media/bot avatar.png').spinner():
-        if message.text:
+    # mt.chat_message("assistant", avatar='media/bot avatar.png').
+    # mt.chat_message("user", avatar='media/user avatar.png').markdown(message.text, text_alignment="right" if st.session_state.language =='Arabic' else 'left')
+    # with mt2.chat_message("assistant", avatar='media/bot avatar.png').spinner():
+    if message.text:
+        mt.chat_message("user", avatar='media/user avatar.png').markdown(message.text, text_alignment="right" if st.session_state.language =='Arabic' else 'left')
+        with mt2.chat_message("assistant", avatar='media/bot avatar.png').spinner():
             st.session_state.messages['messages'].append(('human', message.text))
-            response = st.session_state.agent.predict(st.session_state.messages['messages'])
+            response = st.session_state.agent.predict(st.session_state.messages['messages'], st.session_state.language)
             # st.write(response.content)
             st.session_state.messages['messages'].append(('ai',response))
             st.rerun()
-        if message.audio:
+    if message.audio:
+        mt.chat_message("user", avatar='media/user avatar.png').audio(message.audio)
+        with mt2.chat_message("assistant", avatar='media/bot avatar.png').spinner('listening...'):
             with open("user_voice.mp3", "wb") as f:
                 f.write(message.audio.read())
             text = st.session_state.agent.STT("user_voice.mp3", language=st.session_state.language)
             st.session_state.messages['messages'].append(('human', message.text))
-            response = st.session_state.agent.predict(st.session_state.messages)
+            response = st.session_state.agent.predict(st.session_state.messages, st.session_state.language)
             st.session_state.messages['messages'].append(('ai',response))
             st.rerun()
-        if message.files:
-            for f in message.files:
-                with st.spinner("Please wait while extracting your files text..."):
-                    # for f in files:
-                    found = False
-                    for r in st.session_state.resources:
-                        if f.name==r['name']:
-                            found=True
-                    if not found:
-                        text = file_scrap(f)
-                        # def summarize(self, text, source_type, source_name, language)
-                        source_name = f.name
-                        source_type = f.name.split('.')[-1].lower()
-                        summary = st.session_state.agent.summarize(text, source_type, source_name, st.session_state.language)
-                        st.session_state.messages['messages'].append(('human', f"""attached "{f.name}" file to summarize"""))
-                        st.session_state.messages['messages'].append(('ai',summary))
-                        st.session_state.agent.add_resources(text, source_type, source_name)
-                        add_resources(f.name, f.name.split('.')[-1].lower(), summary, datetime.date.today())
-                        st.success("Your document file added to resources successfully!")
-                        st.rerun()
-                    else:
-                        st.error("File is exist already!")
-                # text = file_scrap(f)
-                # # st.write(text)
-                # summary = st.session_state.agent.summarize(text, source_type, source_name, st.session_state.language)
-                # st.session_state.messages['messages'].append(('human', f"""attached "{f.name}" file to summarize"""))
-                # st.session_state.messages['messages'].append(('ai',summary))
-                # st.session_state.agent.add_resources(text, source_type, source_name)
-                # add_resources(f.name, f.name.split('.')[-1].lower(), summary, datetime.date.today())
-                # st.success("Your resources added successfully!")
-                # st.rerun()
-
-
-# UploadedFile(file_id='e7c89006-d9ec-4b59-8d98-c44d0104b454', name='Intro to Sw Testin Concepts & Techniques MaharaTech Certificate.pdf', type='application/pdf', size=259926, _file_urls=file_id: "e7c89006-d9ec-4b59-8d98-c44d0104b454"
-# upload_url: "/_stcore/upload_file/58df92aa-90d6-415e-9e41-c944c8f60b2a/e7c89006-d9ec-4b59-8d98-c44d0104b454"
-# delete_url: "/_stcore/upload_file/58df92aa-90d6-415e-9e41-c944c8f60b2a/e7c89006-d9ec-4b59-8d98-c44d0104b454"
-# )
-
-# if 'chat_history' not in st.session_state:
-#     st.session_state.chat_history = []
-# if 'current_chat' not in st.session_state:
-#     st.session_state.current_chat = 0
-# if 'report_history' not in st.session_state:
-#     st.session_state.report_history = []
-
-# with st.sidebar:
-#     st.header('Conversation History', divider='blue')
-#     col1, col2 = st.columns([8,1])
-#     with col1:
-#         if st.columns([1,4,1])[1].button(":material/add: New chat", type='tertiary', width='stretch'):
-#             if st.session_state.messages not in st.session_state.chat_history:
-#                 st.session_state.chat_history.append(st.session_state.messages)
-#                 st.session_state.report_history.append(st.session_state.patient_report)
-#             st.session_state.messages = []
-#             st.session_state.patient_report = ""
-#             st.session_state.current_chat = len(st.session_state.chat_history)
-#             st.rerun()
-
-#     if st.session_state.chat_history:
-#         col1, col2 = st.columns([8,1])
-#         k = len(st.session_state.chat_history)
-#         for h in range(len(st.session_state.chat_history)-1, -1, -1):
-#             with col1:
-#                 if st.button(f'chat {k}', width='stretch', type='tertiary'):
-#                     if st.session_state.current_chat >= len(st.session_state.chat_history):
-#                         st.session_state.chat_history.append(st.session_state.messages)
-#                         st.session_state.report_history.append(st.session_state.patient_report)
-#                     else:
-#                         st.session_state.chat_history[st.session_state.current_chat] = st.session_state.messages
-#                         st.session_state.report_history[st.session_state.current_chat] = st.session_state.patient_report
-
-#                     st.session_state.messages = st.session_state.chat_history[h]
-#                     st.session_state.current_chat = h
-#                     st.rerun()
-#             with col2:
-#                 if st.button(':material/delete:', key=k, type='tertiary'):
-#                     st.session_state.chat_history.remove(st.session_state.chat_history[h])
-#                     st.rerun()
-#             k-=1
+    if message.files:
         
-    
-# def new_chat():
-    
-# st.session_state.messages = {
-#         "messages": [
-#             ("system", prompt),
-#         ]
-#     }
-# st.write(st.session_state.chat_history)
+        for f in message.files:
+            with st.spinner("Please wait while extracting your files text..."):
+                # for f in files:
+                found = False
+                for r in st.session_state.resources:
+                    if f.name==r['name']:
+                        found=True
+                if not found:
+                    text = file_scrap(f)
+                    # def summarize(self, text, source_type, source_name, language)
+                    source_name = f.name
+                    source_type = f.name.split('.')[-1].lower()
+                    summary = st.session_state.agent.summarize(text, source_type, source_name, st.session_state.language)
+                    st.session_state.messages['messages'].append(('human', f"""attached "{f.name}" file to summarize"""))
+                    st.session_state.messages['messages'].append(('ai',summary))
+                    st.session_state.agent.add_resources(text, source_type, source_name)
+                    add_resources(f.name, f.name.split('.')[-1].lower(), summary, datetime.date.today())
+                    st.success("Your document file added to resources successfully!")
+                    st.rerun()
+                else:
+                    st.error("File is exist already!")
+
+if st.session_state.resources:
+    with st.columns([2,0.8])[0].expander(":green[:material/database:] Your Resources"):
+        st.subheader("**Your Resources**", divider='blue')
+        types = ['pdf', 'docx','txt', 'web-page', 'youtube']
+        icons = {'web-page':":blue[:material/link:]", 'youtube':":red[:material/smart_display:]", 'pdf':":orange[:material/attachment:]", 'docx':":orange[:material/attachment:]", 'txt':":orange[:material/attachment:]"}
+        if st.session_state.resources:
+            for r in st.session_state.resources:
+                # tp = "Web-Page" if r['type'] == 'web-page' else "Attached file"
+                if r['type']=='web-page':
+                    tp = 'Web-Page'
+                elif r['type']=='youtube':
+                    tp = 'Youtube Video'
+                else:
+                    tp = 'Attached File'
+                col11, col22 = st.columns([2,1], vertical_alignment='center')
+                with col11:
+                    st.markdown(f"{icons[r['type']]} {tp}")
+                with col22:
+                    st.caption(r['date'], text_alignment='right')
+                # st.markdown(f"{icons[r['type']]} {tp}")
+                st.markdown(r['name'])
+                # col11, col22 = st.columns([2,1], vertical_alignment='center')
+                # with col11:
+                with st.popover("Summary", type='tertiary'):
+                    st.markdown(r['summary'])
+                # with col22:
+                    # st.caption(r['date'], text_alignment='right')
+                st.divider()
+        else:
+            # st.space()
+            st.warning("You haven't uploaded any data resources!")
+        
 # Settings
 with st.sidebar:
     # st.divider()
