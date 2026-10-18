@@ -68,19 +68,21 @@ with col2:
 
 
 with col2:
-    st.subheader(":gray[Introduction]", divider='blue', width='content')
+    st.subheader(":gray[Key Features]", divider='blue', width='content')
     st.markdown("""
-    :gray[**AI Medical Agent key features:**]
+    :gray[**AI Based Summarizer and Document Retriever**]
 
     :gray[1. Support text and voice interaction for faster communication (Arabic & English)]
     
-    :gray[2. Support patient's reports & informations]
+    :gray[2. Suuport texxt files attachment [pdf, txt, docx] resiurces]
     
-    :gray[3. Suuport medical information about healthcare from "The Washington Manual of Medical Therapeutics" book]
+    :gray[3. Suuport web scrapping to access web articles resources]
     
-    :gray[4. Support 3 types of knowledge resources (Patients data frame, medical knowledge base RAG system, Kaggle api access for patient's medical imaging scan images)]
+    :gray[4. Support Youtube video subtitles scrapping resources]
     
-    :gray[5. Guard to avoice diagnostic and out of context questions]
+    :gray[5. Answers from only the attached data resources with references]
+
+    :gray[6. Conversational multi chat memory managed in each session]
     """)
     st.divider()
 with col2:
