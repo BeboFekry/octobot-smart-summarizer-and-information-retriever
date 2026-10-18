@@ -303,8 +303,8 @@ if message:
             with open("user_voice.mp3", "wb") as f:
                 f.write(message.audio.read())
             text = st.session_state.agent.STT("user_voice.mp3", language=st.session_state.language)
-            st.session_state.messages['messages'].append(('human', message.text))
-            response = st.session_state.agent.predict(st.session_state.messages, st.session_state.language)
+            st.session_state.messages['messages'].append(('human', text))
+            response = st.session_state.agent.predict(st.session_state.messages['messages'], st.session_state.language)
             st.session_state.messages['messages'].append(('ai',response))
             st.rerun()
     if message.files:
