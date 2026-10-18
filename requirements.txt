@@ -10,6 +10,6 @@ SpeechRecognition
 pydantic
 sentence-transformers
 youtube_transcript_api
-
+beautifulsoup4
 python-docx
 validator_collection
